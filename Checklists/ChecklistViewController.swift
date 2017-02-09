@@ -76,11 +76,11 @@ var checklistitem = [ChecklistItem]()
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
-        if segue.identifier == "AddItem", let destination = segue.destination as? UINavigationController, let viewController = destination.topViewController as? AddItemViewController
+        if segue.identifier == "AddItem", let destination = segue.destination as? UINavigationController, let viewController = destination.topViewController as? ItemDetailViewController
         {
             viewController.delegate = self
         }
-        else if segue.identifier == "EditItem", let destination = segue.destination as? UINavigationController, let viewController = destination.topViewController as? AddItemViewController
+        else if segue.identifier == "EditItem", let destination = segue.destination as? UINavigationController, let viewController = destination.topViewController as? ItemDetailViewController
         {
             viewController.delegate = self
             viewController.itemToEdit = checklistitem[(tableView.indexPath(for: (sender as! UITableViewCell))?.row)!]
@@ -92,19 +92,19 @@ var checklistitem = [ChecklistItem]()
     
 }
 
-extension ChecklistViewController: AddItemViewControllerDelegate
+extension ChecklistViewController: ItemDetailViewControllerDelegate
 {
-    func addItemViewControllerDidCancel(controller: AddItemViewController) {
+    func itemDetailViewControllerDidCancel(controller: ItemDetailViewController) {
         controller.dismiss(animated: true, completion: nil)
     }
     
-    func addItemViewController(controller: AddItemViewController, didFinishAddingItem item: ChecklistItem) {
+    func itemDetailViewController(controller: ItemDetailViewController, didFinishAddingItem item: ChecklistItem) {
         controller.dismiss(animated: true, completion: nil)
         checklistitem.append(item)
         tableView.insertRows(at: [IndexPath(item: checklistitem.count-1, section: 0)], with: UITableViewRowAnimation.automatic)
     }
     
-    func addItemViewController(controller: AddItemViewController, didFinishEditingItem item: ChecklistItem) {
+    func itemDetailViewController(controller: ItemDetailViewController, didFinishEditingItem item: ChecklistItem) {
         controller.dismiss(animated: true, completion: nil)
         print(checklistitem.index(where: {$0 === item}))
         tableView.reloadRows(at: [IndexPath(item: checklistitem.index(where: {$0 === item})!, section: 0)], with: UITableViewRowAnimation.automatic)
